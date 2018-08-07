@@ -32,6 +32,7 @@ dependencies {
     compile 'com.squareup.retrofit2:converter-gson:2.4.0'
     compile 'com.squareup.okhttp3:okhttp:3.11.0'
     compile 'org.pircbotx:pircbotx:2.1'
+    compile 'joda-time:joda-time:2.10'
     runtime 'mysql:mysql-connector-java'
     testCompile 'org.springframework.boot:spring-boot-starter-test'
 }

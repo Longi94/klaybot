@@ -6,6 +6,7 @@ import in.dragonbra.klayb0t.repository.UserRepository;
 import in.dragonbra.klayb0t.retrofit.TwitchIdInterface;
 import in.dragonbra.klayb0t.retrofit.TwitchInterface;
 import in.dragonbra.klayb0t.retrofit.response.TwitchAccessTokenResponse;
+import in.dragonbra.klayb0t.retrofit.response.TwitchCheckUserSubResponse;
 import in.dragonbra.klayb0t.retrofit.response.TwitchUsersResponse;
 import in.dragonbra.klayb0t.util.SessionAttributeNames;
 import okhttp3.HttpUrl;
@@ -19,6 +20,8 @@ import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.math.BigInteger;
 import java.security.SecureRandom;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 /**
@@ -28,11 +31,16 @@ import java.util.Date;
 @Service
 public class TwitchService {
 
+    public static final SimpleDateFormat SUB_DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
+
     @Value("${twitch.client-id}")
     private String twitchClientId;
 
     @Value("${twitch.client-secret}")
     private String twitchClientSecret;
+
+    @Value("${twitch.channel_id}")
+    private String channelId;
 
     private String redirectUri = "http://localhost:8080/twitch/klaybot/authorize";
 
@@ -111,4 +119,25 @@ public class TwitchService {
         }
     }
 
+    public long checkSub(String name) throws IOException, ParseException {
+
+        User user = userRepository.findByUsername(name);
+
+        if (user == null) {
+            return -1;
+        }
+
+        Response<TwitchCheckUserSubResponse> response = twitchInterface
+                .checkUserSubByChannel("OAuth " + user.getTwitchAccessToken(), user.getTwitchId(), channelId).execute();
+
+        if (response.code() == 422) {
+            return -2;
+        }
+
+        TwitchCheckUserSubResponse subResponse = response.body();
+
+        Date subDate = SUB_DATE_FORMAT.parse(subResponse.getCreatedAt());
+
+        return subDate.getTime();
+    }
 }
