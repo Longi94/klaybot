@@ -25,12 +25,15 @@ public class User {
     @Column(name = "twitch_refresh_token", nullable = false)
     private String twitchRefreshToken;
 
-    @Column(name = "twitch_expiry", nullable = false)
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date twitchTokenExpiry;
+    @Column(name = "token_expires_in", nullable = false)
+    private Long tokenExpiresIn;
 
     @Column(name = "username", nullable = false)
     private String username;
+
+    @Column(name = "last_token_refresh", nullable = false)
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date lastTokenRefresh;
 
     public Long getId() {
         return id;
@@ -64,12 +67,12 @@ public class User {
         this.twitchRefreshToken = twitchRefreshToken;
     }
 
-    public Date getTwitchTokenExpiry() {
-        return twitchTokenExpiry;
+    public Long getTokenExpiresIn() {
+        return tokenExpiresIn;
     }
 
-    public void setTwitchTokenExpiry(Date twitchTokenExpiry) {
-        this.twitchTokenExpiry = twitchTokenExpiry;
+    public void setTokenExpiresIn(Long tokenExpiresIn) {
+        this.tokenExpiresIn = tokenExpiresIn;
     }
 
     public String getUsername() {
@@ -78,5 +81,13 @@ public class User {
 
     public void setUsername(String username) {
         this.username = username;
+    }
+
+    public Date getLastTokenRefresh() {
+        return lastTokenRefresh;
+    }
+
+    public void setLastTokenRefresh(Date lastTokenRefresh) {
+        this.lastTokenRefresh = lastTokenRefresh;
     }
 }

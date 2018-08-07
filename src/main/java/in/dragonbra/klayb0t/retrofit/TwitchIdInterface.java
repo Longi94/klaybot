@@ -32,7 +32,7 @@ public interface TwitchIdInterface {
     Call<TwitchAccessTokenResponse> refreshAccessToken(
             @Query("client_id") String clientId,
             @Query("client_secret") String clientSecret,
-            @Query("refresh_token") String code,
+            @Query("refresh_token") String refreshToken,
             @Query("grant_type") String grantType
     );
 }

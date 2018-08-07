@@ -23,6 +23,7 @@ import java.security.SecureRandom;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.concurrent.TimeUnit;
 
 /**
  * @author lngtr
@@ -31,7 +32,9 @@ import java.util.Date;
 @Service
 public class TwitchService {
 
-    public static final SimpleDateFormat SUB_DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
+    private static final SimpleDateFormat SUB_DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
+
+    private static final long MAX_EXPIRY_GAP = TimeUnit.MINUTES.toMillis(15);
 
     @Value("${twitch.client-id}")
     private String twitchClientId;
@@ -109,7 +112,8 @@ public class TwitchService {
             user.setUsername(usersResponse.getUsers().get(0).getLogin());
             user.setTwitchAccessToken(token.getAccessToken());
             user.setTwitchRefreshToken(token.getRefreshToken());
-            user.setTwitchTokenExpiry(new Date(System.currentTimeMillis() + (token.getExpiresIn() * 1000L)));
+            user.setTokenExpiresIn(token.getExpiresIn().longValue() * 1000L);
+            user.setLastTokenRefresh(new Date());
             user.setTwitchId(userId);
 
             userRepository.save(user);
@@ -127,6 +131,8 @@ public class TwitchService {
             return -1;
         }
 
+        validateToken(user);
+
         Response<TwitchCheckUserSubResponse> response = twitchInterface
                 .checkUserSubByChannel("OAuth " + user.getTwitchAccessToken(), user.getTwitchId(), channelId).execute();
 
@@ -134,10 +140,35 @@ public class TwitchService {
             return -2;
         }
 
+        if (response.code() == 401) {
+            // retry after refreshing
+            validateToken(user);
+
+            response = twitchInterface
+                    .checkUserSubByChannel("OAuth " + user.getTwitchAccessToken(), user.getTwitchId(), channelId).execute();
+        }
+
         TwitchCheckUserSubResponse subResponse = response.body();
 
         Date subDate = SUB_DATE_FORMAT.parse(subResponse.getCreatedAt());
 
         return subDate.getTime();
+    }
+
+    private void validateToken(User user) throws IOException {
+        if (user.getLastTokenRefresh().getTime() + user.getTokenExpiresIn() > System.currentTimeMillis() - MAX_EXPIRY_GAP) {
+            return;
+        }
+
+        Response<TwitchAccessTokenResponse> response = twitchIdInterface
+                .refreshAccessToken(twitchClientId, twitchClientSecret, user.getTwitchRefreshToken(), "refresh_token").execute();
+
+        TwitchAccessTokenResponse tokenResponse = response.body();
+
+        user.setTwitchAccessToken(tokenResponse.getAccessToken());
+        user.setTwitchRefreshToken(tokenResponse.getRefreshToken());
+        user.setLastTokenRefresh(new Date());
+
+        userRepository.save(user);
     }
 }
