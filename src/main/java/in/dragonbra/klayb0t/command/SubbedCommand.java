@@ -60,10 +60,6 @@ public class SubbedCommand extends Command {
 
     @Override
     public String handle(User user, String message, String[] args) {
-        if (user.getLogin().equalsIgnoreCase(twitchBotChannel)) {
-            return "Nope Kappa";
-        }
-
         long start = 0;
         try {
             start = twitchService.checkSub(user.getLogin());
