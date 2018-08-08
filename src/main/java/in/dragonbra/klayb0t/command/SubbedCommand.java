@@ -20,7 +20,7 @@ import java.text.ParseException;
 @Component
 public class SubbedCommand extends Command {
 
-    @Value("${login-url}")
+    @Value("${twitch.login-url}")
     private String loginUrl;
 
     @Value("${twitch.bot.channel}")

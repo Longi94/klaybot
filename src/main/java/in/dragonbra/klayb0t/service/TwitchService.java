@@ -45,7 +45,8 @@ public class TwitchService {
     @Value("${twitch.channel_id}")
     private String channelId;
 
-    private String redirectUri = "http://localhost:8080/twitch/klaybot/authorize";
+    @Value("${twitch.rediret-url}")
+    private String redirectUri;
 
     private final TwitchInterface twitchInterface;
 
