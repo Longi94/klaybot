@@ -23,6 +23,9 @@ public class SubbedCommand extends Command {
     @Value("${login-url}")
     private String loginUrl;
 
+    @Value("${twitch.bot.channel}")
+    private String twitchBotChannel;
+
     private final TwitchService twitchService;
 
     private final PeriodFormatter PERIOD_FORMATTER = new PeriodFormatterBuilder()
@@ -57,6 +60,10 @@ public class SubbedCommand extends Command {
 
     @Override
     public String handle(User user, String message, String[] args) {
+        if (user.getLogin().equalsIgnoreCase(twitchBotChannel)) {
+            return "Nope Kappa";
+        }
+
         long start = 0;
         try {
             start = twitchService.checkSub(user.getLogin());
