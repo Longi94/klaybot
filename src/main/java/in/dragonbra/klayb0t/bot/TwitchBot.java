@@ -3,6 +3,7 @@ package in.dragonbra.klayb0t.bot;
 import in.dragonbra.klayb0t.manager.CommandManager;
 import org.pircbotx.Configuration;
 import org.pircbotx.PircBotX;
+import org.pircbotx.cap.EnableCapHandler;
 import org.pircbotx.exception.IrcException;
 import org.pircbotx.hooks.ListenerAdapter;
 import org.pircbotx.hooks.events.PingEvent;
@@ -40,6 +41,7 @@ public class TwitchBot extends ListenerAdapter {
     @PostConstruct
     private void setup() {
         Configuration config = new Configuration.Builder()
+                .addCapHandler(new EnableCapHandler("twitch.tv/tags"))
                 .setName(twitchBotName)
                 .addServer("irc.chat.twitch.tv", 6667)
                 .setServerPassword(twitchBotOAuth)
