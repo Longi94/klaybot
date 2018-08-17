@@ -1,5 +1,6 @@
 package in.dragonbra.klayb0t.bot;
 
+import in.dragonbra.klayb0t.chat.MessageHandler;
 import in.dragonbra.klayb0t.manager.CommandManager;
 import org.pircbotx.Configuration;
 import org.pircbotx.PircBotX;
@@ -13,6 +14,8 @@ import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
 import java.io.IOException;
+import java.util.LinkedList;
+import java.util.List;
 
 /**
  * @author lngtr
@@ -33,6 +36,8 @@ public class TwitchBot extends ListenerAdapter {
     private PircBotX bot;
 
     private final CommandManager commandManager;
+
+    private final List<MessageHandler> messageHandlers = new LinkedList<>();
 
     public TwitchBot(CommandManager commandManager) {
         this.commandManager = commandManager;
@@ -59,6 +64,10 @@ public class TwitchBot extends ListenerAdapter {
     public void onGenericMessage(GenericMessageEvent event) {
         String response = commandManager.onMessage(event);
         sendMessage(response);
+
+        for (MessageHandler messageHandler : messageHandlers) {
+            sendMessage(messageHandler.handle(event.getUser(), event.getMessage()));
+        }
     }
 
     /**
@@ -83,5 +92,9 @@ public class TwitchBot extends ListenerAdapter {
 
     public void start() throws IOException, IrcException {
         bot.startBot();
+    }
+
+    public void addMessageHandler(MessageHandler messageHandler) {
+        messageHandlers.add(messageHandler);
     }
 }
