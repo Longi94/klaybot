@@ -1,5 +1,6 @@
 package in.dragonbra.klayb0t.config;
 
+import in.dragonbra.klayb0t.command.NumberFactCommand;
 import in.dragonbra.klayb0t.command.RandomJackboxCommand;
 import in.dragonbra.klayb0t.command.SimpleResponseCommand;
 import in.dragonbra.klayb0t.command.SubbedCommand;
@@ -23,6 +24,7 @@ public class TwitchBotConfig {
 
         manager.registerCommand(subbedCommand);
         manager.registerCommand(randomJackboxCommand);
+        manager.registerCommand(new NumberFactCommand());
 
         return manager;
     }
