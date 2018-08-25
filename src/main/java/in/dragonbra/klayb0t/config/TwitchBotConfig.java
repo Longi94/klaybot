@@ -1,9 +1,6 @@
 package in.dragonbra.klayb0t.config;
 
-import in.dragonbra.klayb0t.command.NumberFactCommand;
-import in.dragonbra.klayb0t.command.RandomJackboxCommand;
-import in.dragonbra.klayb0t.command.SimpleResponseCommand;
-import in.dragonbra.klayb0t.command.SubbedCommand;
+import in.dragonbra.klayb0t.command.*;
 import in.dragonbra.klayb0t.manager.CommandManager;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -25,6 +22,7 @@ public class TwitchBotConfig {
         manager.registerCommand(subbedCommand);
         manager.registerCommand(randomJackboxCommand);
         manager.registerCommand(new NumberFactCommand());
+        manager.registerCommand(new EatFruitCommand());
 
         return manager;
     }
