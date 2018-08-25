@@ -1,6 +1,8 @@
 package in.dragonbra.klayb0t.bot;
 
+import in.dragonbra.klayb0t.chat.JackboxCodeHandler;
 import in.dragonbra.klayb0t.chat.MessageHandler;
+import in.dragonbra.klayb0t.chat.UserShushHandler;
 import in.dragonbra.klayb0t.manager.CommandManager;
 import org.pircbotx.Configuration;
 import org.pircbotx.PircBotX;
@@ -39,8 +41,11 @@ public class TwitchBot extends ListenerAdapter {
 
     private final List<MessageHandler> messageHandlers = new LinkedList<>();
 
-    public TwitchBot(CommandManager commandManager) {
+    private final JackboxCodeHandler jackboxCodeHandler;
+
+    public TwitchBot(CommandManager commandManager, JackboxCodeHandler jackboxCodeHandler) {
         this.commandManager = commandManager;
+        this.jackboxCodeHandler = jackboxCodeHandler;
     }
 
     @PostConstruct
@@ -55,13 +60,16 @@ public class TwitchBot extends ListenerAdapter {
                 .buildConfiguration();
 
         bot = new PircBotX(config);
+
+        addMessageHandler(new UserShushHandler("taterbb8", 0.33));
+        addMessageHandler(jackboxCodeHandler);
     }
 
     /**
      * PircBotx will return the exact message sent and not the raw line
      */
     @Override
-    public void onGenericMessage(GenericMessageEvent event) {
+    public void onGenericMessage(GenericMessageEvent event) throws Exception {
         String response = commandManager.onMessage(event);
         sendMessage(response);
 

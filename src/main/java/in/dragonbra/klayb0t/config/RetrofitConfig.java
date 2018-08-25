@@ -1,5 +1,6 @@
 package in.dragonbra.klayb0t.config;
 
+import in.dragonbra.klayb0t.retrofit.JackboxInterface;
 import in.dragonbra.klayb0t.retrofit.TwitchIdInterface;
 import in.dragonbra.klayb0t.retrofit.TwitchInterface;
 import in.dragonbra.klayb0t.retrofit.interceptor.HeaderInterceptor;
@@ -48,5 +49,16 @@ public class RetrofitConfig {
                 .build();
 
         return retrofit.create(TwitchIdInterface.class);
+    }
+
+    @Bean
+    public JackboxInterface jackboxInterface() {
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(JackboxInterface.BASE_URL)
+                .addConverterFactory(GsonConverterFactory.create())
+                .client(new OkHttpClient())
+                .build();
+
+        return retrofit.create(JackboxInterface.class);
     }
 }

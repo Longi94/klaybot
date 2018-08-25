@@ -1,7 +1,6 @@
 package in.dragonbra.klayb0t;
 
 import in.dragonbra.klayb0t.bot.TwitchBot;
-import in.dragonbra.klayb0t.chat.UserShushHandler;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -22,8 +21,6 @@ public class KlayBotApp {
 
     public KlayBotApp(TwitchBot twitchBot) {
         this.twitchBot = twitchBot;
-
-        this.twitchBot.addMessageHandler(new UserShushHandler("taterbb8", 0.33));
     }
 
     @Bean
