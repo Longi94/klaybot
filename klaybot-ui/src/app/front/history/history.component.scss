@@ -1,0 +1,24 @@
+.container {
+    display: flex;
+    padding-top: 16px;
+    padding-bottom: 32px;
+    align-items: center;
+    flex-flow: column;
+}
+
+table {
+    width: 100%;
+}
+
+mat-paginator {
+    width: 100%;
+}
+
+.table-container {
+    width: 940px;
+}
+
+.mat-form-field {
+    font-size: 14px;
+    width: 940px;
+}
