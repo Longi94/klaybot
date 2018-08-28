@@ -3,3 +3,7 @@ mat-toolbar {
     top: 0;
     width: 100%
 }
+
+mat-toolbar > span:first-child {
+    margin: 0 16px;
+}
