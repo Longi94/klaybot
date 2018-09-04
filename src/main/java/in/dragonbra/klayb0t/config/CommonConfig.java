@@ -1,5 +1,7 @@
 package in.dragonbra.klayb0t.config;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -7,8 +9,11 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.Resource;
 
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Scanner;
 
 /**
@@ -18,8 +23,8 @@ import java.util.Scanner;
 @Configuration
 public class CommonConfig {
 
-    @Value("classpath:randomjack_games")
-    private Resource randomJackGames;
+    @Value("classpath:game_mapping.json")
+    private Resource gameMappingsResource;
 
     @Value("classpath:randomjack_messages")
     private Resource randomJackMessages;
@@ -27,13 +32,14 @@ public class CommonConfig {
 
     @Bean
     @Qualifier("randomjack_games")
-    public List<String> randomJackGames() throws IOException {
-        return readLines(randomJackGames);
+    public Map<String, String> randomJackGames(Gson gson) throws IOException {
+        Type type = new TypeToken<Map<String, String>>() {}.getType();
+        return gson.fromJson(new InputStreamReader(gameMappingsResource.getInputStream()), type);
     }
 
     @Bean
     @Qualifier("randomjack_messages")
-    public List<String> hugOutcomes() throws IOException {
+    public List<String> randomjackMesssages() throws IOException {
         return readLines(randomJackMessages);
     }
 
@@ -49,5 +55,10 @@ public class CommonConfig {
         scanner.close();
 
         return messages;
+    }
+
+    @Bean
+    public Gson gson() {
+        return new Gson();
     }
 }
