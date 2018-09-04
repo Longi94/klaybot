@@ -1,5 +1,6 @@
 package in.dragonbra.klayb0t.command;
 
+import in.dragonbra.klayb0t.repository.JackboxGameRepository;
 import org.pircbotx.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -17,26 +18,31 @@ import java.util.Random;
 @Component
 public class RandomJackboxCommand extends Command {
 
+    private final JackboxGameRepository jackboxGameRepository;
+
     private final List<String> messages;
 
     private final Map<String, String> games;
 
-    private final List<String> keys;
-
     private final Random random = new Random();
 
     @Autowired
-    public RandomJackboxCommand(@Qualifier("randomjack_messages") List<String> messages,
+    public RandomJackboxCommand(JackboxGameRepository jackboxGameRepository,
+                                @Qualifier("randomjack_messages") List<String> messages,
                                 @Qualifier("randomjack_games") Map<String, String> games) {
         super("randomjack", "");
+        this.jackboxGameRepository = jackboxGameRepository;
         this.messages = messages;
         this.games = games;
-
-        this.keys = new ArrayList<>(games.keySet());
     }
 
     @Override
     public String handle(User user, String message, String[] args) {
+
+        List<String> playedGames = this.jackboxGameRepository.getRecentlyPlayed();
+
+        List<String> keys = new ArrayList<>(games.keySet());
+        keys.removeAll(playedGames);
 
         String player = user.getNick();
         String game = games.get(keys.get(random.nextInt(keys.size())));
