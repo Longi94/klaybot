@@ -26,6 +26,9 @@ import java.util.List;
 @Component
 public class TwitchBot extends ListenerAdapter {
 
+    // 5 mins
+    private static final int RECONNECT_DELAY = 300000;
+
     @Value("${twitch.bot.name}")
     private String twitchBotName;
 
@@ -57,6 +60,8 @@ public class TwitchBot extends ListenerAdapter {
                 .setServerPassword(twitchBotOAuth)
                 .addListener(this)
                 .addAutoJoinChannel("#" + twitchBotChannel)
+                .setAutoReconnect(true)
+                .setAutoReconnectDelay(RECONNECT_DELAY)
                 .buildConfiguration();
 
         bot = new PircBotX(config);
