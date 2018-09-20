@@ -25,6 +25,7 @@ public class TwitchBotConfig {
         manager.registerCommand(todayCommand);
         manager.registerCommand(new NumberFactCommand());
         manager.registerCommand(new EatFruitCommand());
+        manager.registerCommand(new GivePotatoCommand());
 
         return manager;
     }

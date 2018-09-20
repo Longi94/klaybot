@@ -1,5 +1,6 @@
 package in.dragonbra.klayb0t.bot;
 
+import in.dragonbra.klayb0t.chat.DadJokeHandler;
 import in.dragonbra.klayb0t.chat.JackboxCodeHandler;
 import in.dragonbra.klayb0t.chat.MessageHandler;
 import in.dragonbra.klayb0t.chat.MrDestructoidHandler;
@@ -46,9 +47,14 @@ public class TwitchBot extends ListenerAdapter {
 
     private final JackboxCodeHandler jackboxCodeHandler;
 
-    public TwitchBot(CommandManager commandManager, JackboxCodeHandler jackboxCodeHandler) {
+    private final DadJokeHandler dadJokeHandler;
+
+    public TwitchBot(CommandManager commandManager,
+                     JackboxCodeHandler jackboxCodeHandler,
+                     DadJokeHandler dadJokeHandler) {
         this.commandManager = commandManager;
         this.jackboxCodeHandler = jackboxCodeHandler;
+        this.dadJokeHandler = dadJokeHandler;
     }
 
     @PostConstruct
@@ -68,6 +74,7 @@ public class TwitchBot extends ListenerAdapter {
 
         //addMessageHandler(new UserShushHandler("taterbb8", 0.33));
         addMessageHandler(jackboxCodeHandler);
+        addMessageHandler(dadJokeHandler);
         addMessageHandler(new MrDestructoidHandler());
     }
 
