@@ -2,7 +2,7 @@ package in.dragonbra.klayb0t.bot;
 
 import in.dragonbra.klayb0t.chat.JackboxCodeHandler;
 import in.dragonbra.klayb0t.chat.MessageHandler;
-import in.dragonbra.klayb0t.chat.UserShushHandler;
+import in.dragonbra.klayb0t.chat.MrDestructoidHandler;
 import in.dragonbra.klayb0t.manager.CommandManager;
 import org.pircbotx.Configuration;
 import org.pircbotx.PircBotX;
@@ -66,8 +66,9 @@ public class TwitchBot extends ListenerAdapter {
 
         bot = new PircBotX(config);
 
-        addMessageHandler(new UserShushHandler("taterbb8", 0.33));
+        //addMessageHandler(new UserShushHandler("taterbb8", 0.33));
         addMessageHandler(jackboxCodeHandler);
+        addMessageHandler(new MrDestructoidHandler());
     }
 
     /**
