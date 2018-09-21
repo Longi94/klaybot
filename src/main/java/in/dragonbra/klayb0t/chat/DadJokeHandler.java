@@ -14,7 +14,7 @@ import java.util.regex.Pattern;
 @Component
 public class DadJokeHandler extends MessageHandler {
 
-    private static final Pattern PATTERN = Pattern.compile("^I(\\sa|')?m\\s(?<target>.+)$");
+    private static final Pattern PATTERN = Pattern.compile("^(([Ii](\\sa|')?)|a)m\\s(?<target>.+)$");
 
     @Value("${twitch.bot.name}")
     private String botName;
@@ -24,7 +24,7 @@ public class DadJokeHandler extends MessageHandler {
         Matcher matcher = PATTERN.matcher(message);
         if (matcher.matches()) {
             String target = matcher.group("target");
-            return String.format("Hi %s! I'm klayb0t!", target);
+            return String.format("Hi %s! I'm " + botName + "!", target);
         }
         return null;
     }
