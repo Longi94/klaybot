@@ -24,7 +24,7 @@ public class DadJokeHandler extends MessageHandler {
         Matcher matcher = PATTERN.matcher(message);
         if (matcher.matches()) {
             String target = matcher.group("target");
-            return String.format("Hi %s! I'm " + botName + "!", target);
+            return String.format("Hi %s! I'm %s!", target, botName);
         }
         return null;
     }
