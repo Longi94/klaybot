@@ -22,10 +22,17 @@ public class DadJokeHandler extends MessageHandler {
     @Override
     public String handle(User user, String message) throws Exception {
         Matcher matcher = PATTERN.matcher(message);
-        if (matcher.matches()) {
-            String target = matcher.group("target");
-            return String.format("Hi %s! I'm %s!", target, botName);
+
+        if (!matcher.matches()) {
+            return null;
         }
-        return null;
+
+        String target = matcher.group("target");
+
+        if (target.length() > 25) {
+            return null;
+        }
+
+        return String.format("Hi %s! I'm %s!", target, botName);
     }
 }
