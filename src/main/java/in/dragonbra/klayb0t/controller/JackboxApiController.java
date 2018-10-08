@@ -41,10 +41,14 @@ public class JackboxApiController {
 
         switch (result) {
             case 1:
+            case 8:
                 return ResponseEntity.badRequest().body(result);
             case 2:
             case 3:
             case 4:
+            case 5:
+            case 6:
+            case 7:
                 return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE).body(result);
             default:
                 return ResponseEntity.ok(result);

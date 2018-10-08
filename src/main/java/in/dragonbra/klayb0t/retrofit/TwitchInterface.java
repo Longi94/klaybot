@@ -2,7 +2,9 @@ package in.dragonbra.klayb0t.retrofit;
 
 import in.dragonbra.klayb0t.retrofit.response.TwitchAccessTokenResponse;
 import in.dragonbra.klayb0t.retrofit.response.TwitchCheckUserSubResponse;
+import in.dragonbra.klayb0t.retrofit.response.TwitchStreamsResponse;
 import in.dragonbra.klayb0t.retrofit.response.TwitchUsersResponse;
+import org.springframework.lang.Nullable;
 import retrofit2.Call;
 import retrofit2.http.*;
 
@@ -24,6 +26,9 @@ public interface TwitchInterface {
 
     @GET("helix/users")
     Call<TwitchUsersResponse> getUser(@Header("Authorization") String bearerStr);
+
+    @GET("helix/streams")
+    Call<TwitchStreamsResponse> getStreams(@Nullable @Query("user_id") String userId);
 
     @Deprecated
     @GET("kraken/users/{userId}/subscriptions/{channelId}")

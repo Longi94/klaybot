@@ -40,6 +40,18 @@ export class CodeComponent implements OnInit {
                 case 4:
                     this.snackBar.open('Jackbox returned nothing.', null, {duration: 2000});
                     break;
+                case 5:
+                    this.snackBar.open('Unable to reach twitch.', null, {duration: 2000});
+                    break;
+                case 6:
+                    this.snackBar.open('Twitch returned error', null, {duration: 2000});
+                    break;
+                case 7:
+                    this.snackBar.open('Twitch returned nothing.', null, {duration: 2000});
+                    break;
+                case 8:
+                    this.snackBar.open('Stream is not online', null, {duration: 2000});
+                    break;
                 default:
                     this.snackBar.open(error.statusText, null, {duration: 2000});
                     break;

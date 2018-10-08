@@ -3,10 +3,13 @@ package in.dragonbra.klayb0t.service;
 import in.dragonbra.klayb0t.entity.JackboxGame;
 import in.dragonbra.klayb0t.repository.JackboxGameRepository;
 import in.dragonbra.klayb0t.retrofit.JackboxInterface;
+import in.dragonbra.klayb0t.retrofit.TwitchInterface;
+import in.dragonbra.klayb0t.retrofit.response.TwitchStreamsResponse;
 import in.dragonbra.klayb0t.retrofit.response.jackbox.JackboxRoom;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import retrofit2.Call;
 import retrofit2.Response;
@@ -23,15 +26,22 @@ public class JackboxService {
 
     private static final Logger logger = LogManager.getLogger(JackboxService.class);
 
+    @Value("${twitch.channel_id}")
+    private String channelId;
+
     private final JackboxInterface jackboxInterface;
 
     private final JackboxGameRepository jackboxGameRepository;
 
+    private final TwitchInterface twitchInterface;
+
     @Autowired
     public JackboxService(JackboxInterface jackboxInterface,
-                          JackboxGameRepository jackboxGameRepository) {
+                          JackboxGameRepository jackboxGameRepository,
+                          TwitchInterface twitchInterface) {
         this.jackboxInterface = jackboxInterface;
         this.jackboxGameRepository = jackboxGameRepository;
+        this.twitchInterface = twitchInterface;
     }
 
     public int handle(String code) {
@@ -45,6 +55,34 @@ public class JackboxService {
             // we had the same code in the past hour, very high chance its a duplicate
             logger.warn("Duplicate code detected");
             return 1;
+        }
+
+        // Check if stream is online
+        Call<TwitchStreamsResponse> twitchCall = twitchInterface.getStreams(channelId);
+
+        Response<TwitchStreamsResponse> twitchResponse;
+        try {
+            twitchResponse = twitchCall.execute();
+        } catch (IOException e) {
+            logger.warn("failed to call twitch api", e);
+            return 5;
+        }
+
+        if (!twitchResponse.isSuccessful()) {
+            logger.warn("Unsuccessful call to twitch: " + twitchResponse.message());
+            return 6;
+        }
+
+        TwitchStreamsResponse streams = twitchResponse.body();
+
+        if (streams == null) {
+            logger.warn("Response body null");
+            return 7;
+        }
+
+        if (streams.getStreams().size() == 0) {
+            logger.warn("tried to add code while stream is offline");
+            return 8;
         }
 
         Call<JackboxRoom> call = jackboxInterface.getRoom(code);
