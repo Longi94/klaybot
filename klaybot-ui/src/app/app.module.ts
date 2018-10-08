@@ -9,6 +9,7 @@ import { StatsComponent } from "./front/stats/stats.component";
 import { HistoryComponent } from "./front/history/history.component";
 import { FrontModule } from "./front/front.module";
 import { HttpClient, HttpClientModule } from "@angular/common/http";
+import { CodeComponent } from "./front/code/code.component";
 
 const routes: Routes = [
     {
@@ -24,6 +25,11 @@ const routes: Routes = [
     {
         path: 'history',
         component: HistoryComponent,
+        pathMatch: 'full'
+    },
+    {
+        path: 'code',
+        component: CodeComponent,
         pathMatch: 'full'
     }
 ];

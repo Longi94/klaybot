@@ -34,7 +34,7 @@ public class JackboxService {
         this.jackboxGameRepository = jackboxGameRepository;
     }
 
-    public void handle(String code) {
+    public int handle(String code) {
         logger.info("Handling code " + code);
 
         code = code.toUpperCase();
@@ -44,7 +44,7 @@ public class JackboxService {
         if (recentGames.size() > 0) {
             // we had the same code in the past hour, very high chance its a duplicate
             logger.warn("Duplicate code detected");
-            return;
+            return 1;
         }
 
         Call<JackboxRoom> call = jackboxInterface.getRoom(code);
@@ -54,24 +54,24 @@ public class JackboxService {
             response = call.execute();
         } catch (IOException e) {
             logger.warn("Failed to call jackbox api", e);
-            return;
+            return 2;
         }
 
         if (!response.isSuccessful()) {
             logger.warn("Unsuccessful call to jackbox: " + response.message());
-            return;
+            return 3;
         }
 
         JackboxRoom room = response.body();
 
         if (room == null) {
             logger.warn("Response body null");
-            return;
+            return 4;
         }
 
         if (room.getSuccess() != null && !room.getSuccess()) {
             logger.warn("Response unsuccessful response: " + room.getError());
-            return;
+            return 3;
         }
 
         JackboxGame game = new JackboxGame();
@@ -82,5 +82,7 @@ public class JackboxService {
         game.setServer(room.getServer());
 
         jackboxGameRepository.save(game);
+
+        return 0;
     }
 }

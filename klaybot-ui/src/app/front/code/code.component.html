@@ -1,0 +1,16 @@
+<div class="container">
+    <div>
+        <form [formGroup]="codeForm" (ngSubmit)="sendCode()">
+            <mat-form-field>
+                <input matInput placeholder="Hint" formControlName="code" maxlength="4">
+                <mat-error *ngIf="codeForm.hasError('bad-format', ['code']) && !codeForm.hasError('required', ['code'])">
+                    Code should be <strong>4 uppercase letters</strong>
+                </mat-error>
+                <mat-error *ngIf="codeForm.hasError('required', ['code'])">
+                    Code is <strong>required</strong>
+                </mat-error>
+            </mat-form-field>
+            <button mat-raised-button color="primary" type="submit" [disabled]="!codeForm.valid">Send code</button>
+        </form>
+    </div>
+</div>
