@@ -2,7 +2,7 @@
     <div>
         <form [formGroup]="codeForm" (ngSubmit)="sendCode()">
             <mat-form-field>
-                <input matInput placeholder="Hint" formControlName="code" maxlength="4">
+                <input matInput placeholder="Code" formControlName="code" maxlength="4">
                 <mat-error *ngIf="codeForm.hasError('bad-format', ['code']) && !codeForm.hasError('required', ['code'])">
                     Code should be <strong>4 uppercase letters</strong>
                 </mat-error>
