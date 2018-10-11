@@ -16,7 +16,7 @@ import java.util.regex.Pattern;
 @Component
 public class JackboxCodeHandler extends MessageHandler {
 
-    private static final Pattern CODE_PATTERN = Pattern.compile("^(.*[^A-Z])?(?<code>[A-Z]{4})(.*[^A-Z])?$");
+    private static final Pattern CODE_PATTERN = Pattern.compile("(^|\\s)(?<code>[A-Z]{4})($|\\s)");
 
     @Value("${twitch.bot.channel}")
     private String twitchBotChannel;
@@ -35,13 +35,11 @@ public class JackboxCodeHandler extends MessageHandler {
         }
 
         Matcher matcher = CODE_PATTERN.matcher(message);
-        if (!matcher.matches()) {
-            return null;
+
+        while (matcher.find()) {
+            String code = matcher.group("code");
+            jackboxService.handle(code);
         }
-
-        String code = matcher.group("code");
-
-        jackboxService.handle(code);
 
         return null;
     }
