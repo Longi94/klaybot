@@ -6,10 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Random;
+import java.util.*;
 
 /**
  * @author lngtr
@@ -33,7 +30,10 @@ public class RandomJackboxCommand extends Command {
         super("randomjack", "");
         this.jackboxGameRepository = jackboxGameRepository;
         this.messages = messages;
-        this.games = games;
+        this.games = new HashMap<String, String>(games);
+
+        this.games.remove("ydkj2015");
+        this.games.remove("fakinit");
     }
 
     @Override
