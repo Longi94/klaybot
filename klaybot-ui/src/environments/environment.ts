@@ -7,6 +7,7 @@ export const environment = {
 
     serverUrl: 'http://localhost:8080/',
 
+    // @ts-ignore
     version: require('../../package.json').version + '-DEV'
 };
 

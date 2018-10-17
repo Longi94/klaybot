@@ -3,5 +3,6 @@ export const environment = {
 
     serverUrl: 'https://klayyy.com/',
 
+    // @ts-ignore
     version: require('../../package.json').version
 };
