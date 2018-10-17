@@ -9,3 +9,11 @@ mat-toolbar {
 mat-toolbar > span:first-child {
     margin: 0 16px;
 }
+
+.spacer {
+    flex: 1 1 auto;
+}
+
+#version {
+    font-size: 14px;
+}

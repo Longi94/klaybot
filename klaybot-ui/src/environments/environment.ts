@@ -5,7 +5,9 @@
 export const environment = {
     production: false,
 
-    serverUrl: 'http://localhost:8080/'
+    serverUrl: 'http://localhost:8080/',
+
+    version: require('../../package.json').version + '-DEV'
 };
 
 /*
