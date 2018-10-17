@@ -2,14 +2,17 @@ package in.dragonbra.klayb0t.controller;
 
 import in.dragonbra.klayb0t.entity.JackboxGame;
 import in.dragonbra.klayb0t.repository.JackboxGameRepository;
+import in.dragonbra.klayb0t.repository.JackboxGameStat;
 import in.dragonbra.klayb0t.service.JackboxService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author lngtr
@@ -23,10 +26,14 @@ public class JackboxApiController {
 
     private final JackboxService jackboxService;
 
+    private final Map<String, String> gameMapping;
+
     @Autowired
-    public JackboxApiController(JackboxGameRepository jackboxGameRepository, JackboxService jackboxService) {
+    public JackboxApiController(JackboxGameRepository jackboxGameRepository, JackboxService jackboxService,
+                                @Qualifier("randomjack_games") Map<String, String> gameMapping) {
         this.jackboxGameRepository = jackboxGameRepository;
         this.jackboxService = jackboxService;
+        this.gameMapping = gameMapping;
     }
 
     @GetMapping("/games")
@@ -53,5 +60,15 @@ public class JackboxApiController {
             default:
                 return ResponseEntity.ok(result);
         }
+    }
+
+    @GetMapping("/games/mapping")
+    public Map<String, String> getMapping() {
+        return gameMapping;
+    }
+
+    @GetMapping("/games/stats")
+    public List<JackboxGameStat> getGameStats() {
+        return jackboxGameRepository.getStats();
     }
 }

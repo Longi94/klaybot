@@ -1,28 +1,34 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpErrorResponse } from "@angular/common/http";
-import { Observable, throwError } from "rxjs/index";
+import { HttpClient } from "@angular/common/http";
+import { Observable } from "rxjs";
 import { JackboxGame } from "../model/jackbox-game";
-import { catchError } from "rxjs/internal/operators";
 import { environment } from "../../environments/environment";
+import { JackboxGameStat } from "../model/jackbox-game-stat";
+
+const BASE_URL = `${environment.serverUrl}api/jackbox`;
 
 @Injectable()
 export class JackboxService {
-
-    private serverUrl = environment.serverUrl;
-
-    private baseUrl = `${this.serverUrl}api/jackbox`;
 
     constructor(private httpClient: HttpClient) {
     }
 
     getJackboxGames(): Observable<JackboxGame[]> {
-        return this.httpClient.get<JackboxGame[]>(`${this.baseUrl}/games`);
+        return this.httpClient.get<JackboxGame[]>(`${BASE_URL}/games`);
+    }
+
+    getMapping(): Observable<{ [s: string]: string }> {
+        return this.httpClient.get<{ [s: string]: string }>(`${BASE_URL}/games/mapping`);
+    }
+
+    getStats(): Observable<JackboxGameStat[]> {
+        return this.httpClient.get<JackboxGameStat[]>(`${BASE_URL}/games/stats`);
     }
 
     sendJackboxCode(code: string): Observable<void> {
         const formData = new FormData();
         formData.append('code', code);
-        return this.httpClient.post<void>(`${this.baseUrl}/games`, formData);
+        return this.httpClient.post<void>(`${BASE_URL}/games`, formData);
     }
 }
 

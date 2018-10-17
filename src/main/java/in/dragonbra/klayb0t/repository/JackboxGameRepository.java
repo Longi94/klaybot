@@ -18,4 +18,7 @@ public interface JackboxGameRepository extends JpaRepository<JackboxGame, Long> 
 
     @Query(value = "SELECT * FROM jackbox_game WHERE code = :code AND created > date_add(now(), INTERVAL -1 HOUR)", nativeQuery = true)
     List<JackboxGame> getRecentByCode(@Param("code") String code);
+
+    @Query(value = "SELECT app_tag as appTag, count(*) as `count`, max(created) as lastPlayed FROM jackbox_game GROUP BY app_tag ORDER BY `count` DESC", nativeQuery = true)
+    List<JackboxGameStat> getStats();
 }

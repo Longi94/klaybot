@@ -1,3 +1,22 @@
-<p>
-    stats works!
-</p>
+<div class="container">
+
+    <div class="table-container mat-elevation-z8">
+        <table mat-table [dataSource]="dataSource" matSort>
+            <ng-container matColumnDef="name">
+                <th mat-header-cell *matHeaderCellDef> Name </th>
+                <td mat-cell *matCellDef="let element"> {{mapping[element.appTag]}} </td>
+            </ng-container>
+            <ng-container matColumnDef="count">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header> Play count </th>
+                <td mat-cell *matCellDef="let element"> {{element.count}} </td>
+            </ng-container>
+            <ng-container matColumnDef="lastPlayed">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header> Last played </th>
+                <td mat-cell *matCellDef="let element"> {{element.lastPlayed | date : 'medium'}} </td>
+            </ng-container>
+
+            <tr mat-header-row *matHeaderRowDef="columnsToDisplay"></tr>
+            <tr mat-row *matRowDef="let myRowData; columns: columnsToDisplay"></tr>
+        </table>
+    </div>
+</div>
