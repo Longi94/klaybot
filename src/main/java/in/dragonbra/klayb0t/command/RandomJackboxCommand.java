@@ -27,7 +27,7 @@ public class RandomJackboxCommand extends Command {
     public RandomJackboxCommand(JackboxGameRepository jackboxGameRepository,
                                 @Qualifier("randomjack_messages") List<String> messages,
                                 @Qualifier("randomjack_games") Map<String, String> games) {
-        super("randomjack", "");
+        super("randomjack");
         this.jackboxGameRepository = jackboxGameRepository;
         this.messages = messages;
         this.games = new HashMap<String, String>(games);

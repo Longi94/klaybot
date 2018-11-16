@@ -21,7 +21,7 @@ public class NumberFactCommand extends Command {
     private final OkHttpClient client = new OkHttpClient();
 
     public NumberFactCommand() {
-        super("fact", "");
+        super("fact");
     }
 
     @Override

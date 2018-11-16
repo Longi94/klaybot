@@ -83,11 +83,16 @@ public class TwitchBot extends ListenerAdapter {
      */
     @Override
     public void onGenericMessage(GenericMessageEvent event) throws Exception {
-        String response = commandManager.onMessage(event);
+        long currentTimestamp = System.currentTimeMillis();
+
+        String response = commandManager.onMessage(event, currentTimestamp);
         sendMessage(response);
 
         for (MessageHandler messageHandler : messageHandlers) {
-            sendMessage(messageHandler.handle(event.getUser(), event.getMessage()));
+            if (messageHandler.canExecute(currentTimestamp)) {
+                messageHandler.setLastHandle(currentTimestamp);
+                sendMessage(messageHandler.handle(event.getUser(), event.getMessage()));
+            }
         }
     }
 

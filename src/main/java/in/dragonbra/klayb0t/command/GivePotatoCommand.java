@@ -8,7 +8,7 @@ import org.pircbotx.User;
  */
 public class GivePotatoCommand extends Command {
     public GivePotatoCommand() {
-        super("givepotato", "");
+        super("givepotato");
     }
 
     @Override

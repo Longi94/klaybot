@@ -10,13 +10,13 @@ public class MrDestructoidHandler extends MessageHandler {
 
     private static final long MIN_DELAY = 30000L;
 
-    private long lastRobotHandle = 0L;
+    public MrDestructoidHandler() {
+        super(MIN_DELAY);
+    }
 
     @Override
-    public String handle(User user, String message) throws Exception {
-        long currentTime = System.currentTimeMillis();
-        if (lastRobotHandle + MIN_DELAY < currentTime && message.contains("MrDestructoid")) {
-            lastRobotHandle = currentTime;
+    public String handle(User user, String message) {
+        if (message.contains("MrDestructoid")) {
             return "MrDestructoid";
         }
         return null;

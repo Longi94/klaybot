@@ -1,11 +1,12 @@
 package in.dragonbra.klayb0t.command;
 
+import in.dragonbra.klayb0t.chat.BaseHandler;
 import org.pircbotx.User;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public abstract class Command {
+public abstract class Command extends BaseHandler {
 
     private String commandText;
 
@@ -13,7 +14,20 @@ public abstract class Command {
 
     private List<CommandArgument> arguments = new ArrayList<>();
 
+    public Command(String commandText) {
+        this(commandText, "");
+    }
+
     public Command(String commandText, String description) {
+        this(commandText, description, 0L);
+    }
+
+    public Command(String commandText, long coolDown) {
+        this(commandText, "", coolDown);
+    }
+
+    public Command(String commandText, String description, long coolDown) {
+        super(coolDown);
         this.commandText = commandText;
         this.description = description;
     }

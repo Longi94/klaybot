@@ -24,7 +24,7 @@ public class TodayCommand extends Command {
     @Autowired
     public TodayCommand(JackboxGameRepository jackboxGameRepository,
                         @Qualifier("randomjack_games") Map<String, String> gameMapping) {
-        super("today", "");
+        super("today");
         this.jackboxGameRepository = jackboxGameRepository;
         this.gameMapping = gameMapping;
     }

@@ -21,18 +21,12 @@ public class DadJokeHandler extends MessageHandler {
     @Value("${twitch.bot.name}")
     private String botName;
 
-    private long lastTimestamp = 0L;
+    public DadJokeHandler() {
+        super(MIN_DELAY);
+    }
 
     @Override
     public String handle(User user, String message) {
-        long currentTimestamp = System.currentTimeMillis();
-
-        if (lastTimestamp > currentTimestamp - MIN_DELAY) {
-            return null;
-        }
-
-        lastTimestamp = currentTimestamp;
-
         Matcher matcher = PATTERN.matcher(message);
 
         if (!matcher.matches()) {

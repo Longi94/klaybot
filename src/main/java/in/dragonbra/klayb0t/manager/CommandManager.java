@@ -30,7 +30,7 @@ public class CommandManager {
         commands.put(command.getCommandText(), command);
     }
 
-    public String onMessage(GenericMessageEvent event) {
+    public String onMessage(GenericMessageEvent event, long timestamp) {
         User user = event.getUser();
         String message = event.getMessage();
 
@@ -44,8 +44,10 @@ public class CommandManager {
             String command = split[0];
             String[] args = split.length >= 2 ? Arrays.copyOfRange(split, 1, split.length) : new String[0];
 
-            if (commands.containsKey(command)) {
-                return commands.get(command).handle(user, message, args);
+            Command handler = commands.get(command);
+            if (handler != null && handler.canExecute(timestamp)) {
+                handler.setLastHandle(timestamp);
+                return handler.handle(user, message, args);
             } else {
                 logger.info("Unknown command: " + command);
             }

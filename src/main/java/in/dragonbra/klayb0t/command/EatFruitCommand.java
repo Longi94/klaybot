@@ -11,7 +11,7 @@ public class EatFruitCommand extends Command {
     private int state = 0;
 
     public EatFruitCommand() {
-        super("eatfruit", "");
+        super("eatfruit");
     }
 
     @Override

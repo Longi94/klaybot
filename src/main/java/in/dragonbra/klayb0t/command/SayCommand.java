@@ -11,7 +11,7 @@ public class SayCommand extends Command {
     private String twitchOwner;
 
     public SayCommand() {
-        super("say", "");
+        super("say");
     }
 
     @Override
