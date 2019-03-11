@@ -6,11 +6,16 @@ import in.dragonbra.klayb0t.chat.MessageHandler;
 import in.dragonbra.klayb0t.chat.MrDestructoidHandler;
 import in.dragonbra.klayb0t.manager.CommandManager;
 import org.pircbotx.Configuration;
+import org.pircbotx.InputParser;
 import org.pircbotx.PircBotX;
 import org.pircbotx.cap.EnableCapHandler;
 import org.pircbotx.exception.IrcException;
+import org.pircbotx.hooks.Listener;
 import org.pircbotx.hooks.ListenerAdapter;
+import org.pircbotx.hooks.events.MessageEvent;
 import org.pircbotx.hooks.events.PingEvent;
+import org.pircbotx.hooks.events.PrivateMessageEvent;
+import org.pircbotx.hooks.events.UnknownEvent;
 import org.pircbotx.hooks.types.GenericMessageEvent;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -19,6 +24,8 @@ import javax.annotation.PostConstruct;
 import java.io.IOException;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * @author lngtr
@@ -30,6 +37,9 @@ public class TwitchBot extends ListenerAdapter {
     // 5 mins
     private static final int RECONNECT_DELAY = 300000;
 
+    private static final Pattern IRC_PATTERN = Pattern
+            .compile("^(?:@([^\\r\\n ]*) +|())(?::([^\\r\\n ]+) +|())([^\\r\\n ]+)(?: +([^:\\r\\n ]+[^\\r\\n ]*(?: +[^:\\r\\n ]+[^\\r\\n ]*)*)|())?(?: +:([^\\r\\n]*)| +())?[\\r\\n]*$");
+
     @Value("${twitch.bot.name}")
     private String twitchBotName;
 
@@ -38,6 +48,9 @@ public class TwitchBot extends ListenerAdapter {
 
     @Value("${twitch.bot.channel}")
     private String twitchBotChannel;
+
+    @Value("${twitch.owner}")
+    private String twitchOwner;
 
     private PircBotX bot;
 
@@ -57,10 +70,28 @@ public class TwitchBot extends ListenerAdapter {
         this.dadJokeHandler = dadJokeHandler;
     }
 
+    private final Listener ircListener = event -> {
+        if (event instanceof UnknownEvent) {
+            String line = ((UnknownEvent) event).getLine();
+            Matcher matcher = IRC_PATTERN.matcher(line);
+
+            if (!matcher.matches()) {
+                return;
+            }
+
+            if ("WHISPER".equals(matcher.group(5))) {
+                onWhisper(line.substring(1, line.indexOf('!')), matcher.group(8));
+            }
+
+        }
+    };
+
     @PostConstruct
     private void setup() {
         Configuration config = new Configuration.Builder()
                 .addCapHandler(new EnableCapHandler("twitch.tv/tags"))
+                .addCapHandler(new EnableCapHandler("twitch.tv/commands"))
+                .addListener(ircListener)
                 .setName(twitchBotName)
                 .addServer("irc.chat.twitch.tv", 6667)
                 .setServerPassword(twitchBotOAuth)
@@ -93,6 +124,12 @@ public class TwitchBot extends ListenerAdapter {
                 messageHandler.setLastHandle(currentTimestamp);
                 sendMessage(messageHandler.handle(event.getUser(), event.getMessage()));
             }
+        }
+    }
+
+    private void onWhisper(String user, String message) {
+        if (twitchOwner.equalsIgnoreCase(user)) {
+            sendMessage(message);
         }
     }
 
