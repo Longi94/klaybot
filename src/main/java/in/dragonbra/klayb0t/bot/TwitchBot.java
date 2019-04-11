@@ -6,15 +6,12 @@ import in.dragonbra.klayb0t.chat.MessageHandler;
 import in.dragonbra.klayb0t.chat.MrDestructoidHandler;
 import in.dragonbra.klayb0t.manager.CommandManager;
 import org.pircbotx.Configuration;
-import org.pircbotx.InputParser;
 import org.pircbotx.PircBotX;
 import org.pircbotx.cap.EnableCapHandler;
 import org.pircbotx.exception.IrcException;
 import org.pircbotx.hooks.Listener;
 import org.pircbotx.hooks.ListenerAdapter;
-import org.pircbotx.hooks.events.MessageEvent;
 import org.pircbotx.hooks.events.PingEvent;
-import org.pircbotx.hooks.events.PrivateMessageEvent;
 import org.pircbotx.hooks.events.UnknownEvent;
 import org.pircbotx.hooks.types.GenericMessageEvent;
 import org.springframework.beans.factory.annotation.Value;
@@ -103,7 +100,6 @@ public class TwitchBot extends ListenerAdapter {
 
         bot = new PircBotX(config);
 
-        //addMessageHandler(new UserShushHandler("taterbb8", 0.33));
         addMessageHandler(jackboxCodeHandler);
         addMessageHandler(dadJokeHandler);
         addMessageHandler(new MrDestructoidHandler());
