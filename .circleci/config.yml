@@ -31,7 +31,7 @@ jobs:
           at: /tmp/klaybot/build
       - run:
           name: Archive existing jars
-          command: ssh $SSH_USER@$SSH_HOST -p $SSH_PORT "sudo mv $KLAYBOT_HOME/*.jar $KLAYBOT_HOME/archive/"
+          command: ssh $SSH_USER@$SSH_HOST -p $SSH_PORT "sudo mv $KLAYBOT_HOME/*.jar $KLAYBOT_HOME/archive/ || true"
       - run:
           name: Copy artifact to host
           command: scp -P $SSH_PORT /tmp/klaybot/build/libs/*.jar "$SSH_USER@$SSH_HOST:/home/$SSH_USER/"
