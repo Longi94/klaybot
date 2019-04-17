@@ -1,4 +1,4 @@
-version: 2
+version: 2.1
 
 executors:
   klaybot-executor:
@@ -32,7 +32,7 @@ jobs:
       enabled: true
     steps:
       - attach_workspace:
-            at: /tmp/klaybot/build
+          at: /tmp/klaybot/build
       - run:
           name: Archive existing jars
           command: ssh $SSH_USER@$SSH_HOST -p $SSH_PORT "sudo mv $KLAYBOT_HOME/*.jar $KLAYBOT_HOME/archive/"
