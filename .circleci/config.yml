@@ -1,0 +1,18 @@
+version: 2
+jobs:
+  build:
+    working_directory: ~/klaybot
+    docker:
+      - image: circleci/openjdk:8-jdk-browsers
+    steps:
+      - checkout
+      - restore_cache:
+          keys:
+            - gradle-{{ checksum "build.gradle" }}
+      - run: ./gradlew assemble
+      - save_cache:
+          paths:
+            - ~/.gradle
+          key: gradle-{{ checksum "build.gradle" }}
+      - store_artifacts:
+          path: build/libs
