@@ -1,9 +1,14 @@
 version: 2
-jobs:
-  build:
-    working_directory: ~/klaybot
+
+executors:
+  klaybot-executor:
     docker:
       - image: circleci/openjdk:8-jdk-browsers
+    working_directory: /tmp/klaybot
+
+jobs:
+  build:
+    executor: klaybot-executor
     steps:
       - checkout
       - restore_cache:
@@ -17,17 +22,23 @@ jobs:
           key: gradle-{{ checksum "build.gradle" }}
       - store_artifacts:
           path: build/libs
+      - persist_to_workspace:
+          root: build
+          paths:
+            - libs
   deploy:
-    working_directory: ~/klaybot
+    executor: klaybot-executor
     machine:
       enabled: true
     steps:
+      - attach_workspace:
+            at: /tmp/klaybot/build
       - run:
           name: Archive existing jars
           command: ssh $SSH_USER@$SSH_HOST -p $SSH_PORT "sudo mv $KLAYBOT_HOME/*.jar $KLAYBOT_HOME/archive/"
       - run:
           name: Copy artifact to host
-          command: scp -P $SSH_PORT build/libs/*.jar "$SSH_USER@$SSH_HOST:/home/$SSH_USER/"
+          command: scp -P $SSH_PORT /tmp/klaybot/build/libs/*.jar "$SSH_USER@$SSH_HOST:/home/$SSH_USER/"
 
 workflows:
   version: 2
