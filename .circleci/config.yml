@@ -35,6 +35,12 @@ jobs:
       - run:
           name: Copy artifact to host
           command: scp -P $SSH_PORT /tmp/klaybot/build/libs/*.jar "$SSH_USER@$SSH_HOST:/home/$SSH_USER/"
+      - run:
+          name: Copy artifact to deploy folder
+          command: ssh $SSH_USER@$SSH_HOST -p $SSH_PORT "sudo mv ~/klayb0t-*.jar $KLAYBOT_HOME/"
+      - run:
+          name: Restart service
+          command: ssh $SSH_USER@$SSH_HOST -p $SSH_PORT "sudo systemctl restart klaybot"
 
 workflows:
   version: 2
