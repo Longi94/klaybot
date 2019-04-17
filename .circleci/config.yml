@@ -1,14 +1,10 @@
 version: 2.1
 
-executors:
-  klaybot-executor:
-    docker:
-      - image: circleci/openjdk:8-jdk-browsers
-    working_directory: /tmp/klaybot
-
 jobs:
   build:
-    executor: klaybot-executor
+    working_directory: /tmp/klaybot
+    docker:
+      - image: circleci/openjdk:8-jdk-browsers
     steps:
       - checkout
       - restore_cache:
@@ -27,7 +23,7 @@ jobs:
           paths:
             - libs
   deploy:
-    executor: klaybot-executor
+    working_directory: /tmp/klaybot
     machine:
       enabled: true
     steps:
