@@ -24,10 +24,10 @@ jobs:
     steps:
       - run:
           name: Archive existing jars
-          command: ssh $SSH_USER@$SSH_HOST "sudo mv $KLAYBOT_HOME/*.jar $KLAYBOT_HOME/archive/"
+          command: ssh $SSH_USER@$SSH_HOST -p $SSH_PORT "sudo mv $KLAYBOT_HOME/*.jar $KLAYBOT_HOME/archive/"
       - run:
           name: Copy artifact to host
-          command: scp build/libs/*.jar "$SSH_USER@$SSH_HOST:/home/$SSH_USER/"
+          command: scp -P $SSH_PORT build/libs/*.jar "$SSH_USER@$SSH_HOST:/home/$SSH_USER/"
 
 workflows:
   version: 2
