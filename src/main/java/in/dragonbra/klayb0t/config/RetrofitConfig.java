@@ -20,10 +20,14 @@ public class RetrofitConfig {
     @Value("${twitch.client-id}")
     private String twitchClientId;
 
+    @Value("${twitch.oauth2}")
+    private String twitchOAuth;
+
     @Bean
     public TwitchInterface twitchInterface() {
         OkHttpClient client = new OkHttpClient.Builder()
                 .addInterceptor(new HeaderInterceptor("Client-ID", twitchClientId))
+                .addInterceptor(new HeaderInterceptor("Authorization", "Bearer " + twitchOAuth))
                 .build();
 
         Retrofit retrofit = new Retrofit.Builder()
