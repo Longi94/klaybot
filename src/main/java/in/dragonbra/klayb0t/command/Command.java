@@ -1,5 +1,6 @@
 package in.dragonbra.klayb0t.command;
 
+import in.dragonbra.klayb0t.bot.TwitchBot;
 import in.dragonbra.klayb0t.chat.BaseHandler;
 import org.pircbotx.User;
 
@@ -13,6 +14,8 @@ public abstract class Command extends BaseHandler {
     private String description;
 
     private List<CommandArgument> arguments = new ArrayList<>();
+
+    protected TwitchBot bot;
 
     public Command(String commandText) {
         this(commandText, "");
@@ -73,4 +76,8 @@ public abstract class Command extends BaseHandler {
     }
 
     public abstract String handle(User user, String message, String[] args);
+
+    public void setBot(TwitchBot bot) {
+        this.bot = bot;
+    }
 }

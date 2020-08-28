@@ -1,5 +1,6 @@
 package in.dragonbra.klayb0t.manager;
 
+import in.dragonbra.klayb0t.bot.TwitchBot;
 import in.dragonbra.klayb0t.command.Command;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -53,5 +54,11 @@ public class CommandManager {
             }
         }
         return null;
+    }
+
+    public void setBot(TwitchBot bot) {
+        for (Command command : commands.values()) {
+            command.setBot(bot);
+        }
     }
 }

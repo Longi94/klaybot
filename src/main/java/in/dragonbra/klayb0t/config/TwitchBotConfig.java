@@ -15,7 +15,8 @@ public class TwitchBotConfig {
     @Bean
     public CommandManager commandManager(RandomJackboxCommand randomJackboxCommand,
                                          TodayCommand todayCommand,
-                                         RainbowsCommand rainbowsCommand) {
+                                         RainbowsCommand rainbowsCommand,
+                                         SlapCommand slapCommand) {
         CommandManager manager = new CommandManager();
 
         manager.registerCommand(new SimpleResponseCommand("ping", "ping", "pong!"));
@@ -24,6 +25,7 @@ public class TwitchBotConfig {
         manager.registerCommand(todayCommand);
         manager.registerCommand(rainbowsCommand);
         manager.registerCommand(new PlayCommand());
+        manager.registerCommand(slapCommand);
 
         return manager;
     }

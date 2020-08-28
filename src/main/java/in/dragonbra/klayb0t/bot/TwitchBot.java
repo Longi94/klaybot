@@ -7,6 +7,7 @@ import in.dragonbra.klayb0t.chat.MrDestructoidHandler;
 import in.dragonbra.klayb0t.manager.CommandManager;
 import org.pircbotx.Configuration;
 import org.pircbotx.PircBotX;
+import org.pircbotx.User;
 import org.pircbotx.cap.EnableCapHandler;
 import org.pircbotx.exception.IrcException;
 import org.pircbotx.hooks.Listener;
@@ -23,6 +24,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 /**
  * @author lngtr
@@ -65,6 +67,8 @@ public class TwitchBot extends ListenerAdapter {
         this.commandManager = commandManager;
         this.jackboxCodeHandler = jackboxCodeHandler;
         this.dadJokeHandler = dadJokeHandler;
+
+        this.commandManager.setBot(this);
     }
 
     private final Listener ircListener = event -> {
@@ -155,5 +159,9 @@ public class TwitchBot extends ListenerAdapter {
 
     public void addMessageHandler(MessageHandler messageHandler) {
         messageHandlers.add(messageHandler);
+    }
+
+    public List<String> getUsers() {
+        return bot.getUserChannelDao().getAllUsers().stream().map(User::getNick).collect(Collectors.toList());
     }
 }
