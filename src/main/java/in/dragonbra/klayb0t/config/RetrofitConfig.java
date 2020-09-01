@@ -2,6 +2,7 @@ package in.dragonbra.klayb0t.config;
 
 import in.dragonbra.klayb0t.retrofit.JackboxInterface;
 import in.dragonbra.klayb0t.retrofit.TwitchInterface;
+import in.dragonbra.klayb0t.retrofit.TwitchTmiInterface;
 import in.dragonbra.klayb0t.retrofit.interceptor.HeaderInterceptor;
 import okhttp3.OkHttpClient;
 import org.springframework.beans.factory.annotation.Value;
@@ -48,5 +49,16 @@ public class RetrofitConfig {
                 .build();
 
         return retrofit.create(JackboxInterface.class);
+    }
+
+    @Bean
+    public TwitchTmiInterface twitchTmiInterface() {
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(TwitchTmiInterface.BASE_URL)
+                .addConverterFactory(GsonConverterFactory.create())
+                .client(new OkHttpClient())
+                .build();
+
+        return retrofit.create(TwitchTmiInterface.class);
     }
 }
