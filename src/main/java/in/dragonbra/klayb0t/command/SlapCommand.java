@@ -3,12 +3,13 @@ package in.dragonbra.klayb0t.command;
 import com.google.common.collect.ImmutableList;
 import in.dragonbra.klayb0t.service.TwitchService;
 import org.pircbotx.User;
-import org.springframework.beans.factory.annotation.Value;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 import java.util.List;
 import java.util.Random;
+import java.util.Set;
 
 @Component
 public class SlapCommand extends Command {
@@ -21,14 +22,13 @@ public class SlapCommand extends Command {
             "big meaty claws", RANDOM_VIEWER
     );
 
-    @Value("${twitch.bot.name}")
-    private String botName;
-
     private final TwitchService twitchService;
+    private final Set<String> excludeList;
 
-    public SlapCommand(TwitchService twitchService) {
+    public SlapCommand(TwitchService twitchService, @Qualifier("slap_exclude_list") Set<String> excludeList) {
         super("slap");
         this.twitchService = twitchService;
+        this.excludeList = excludeList;
     }
 
     @Override
@@ -41,7 +41,7 @@ public class SlapCommand extends Command {
             return null;
         }
 
-        users.remove(botName);
+        users.removeAll(excludeList);
 
         String target = users.get(rand.nextInt(users.size()));
         String item = THINGS.get(rand.nextInt(THINGS.size()));
