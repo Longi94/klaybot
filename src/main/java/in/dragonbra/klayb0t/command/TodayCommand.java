@@ -33,9 +33,9 @@ public class TodayCommand extends Command {
     public String handle(User user, String message, String[] args) {
         List<String> games = this.jackboxGameRepository.getRecentlyPlayed();
 
-        String playedGames = games.stream().map(tag -> gameMapping.get(tag)).collect(Collectors.joining(", "));
+        String playedGames = games.stream().map(tag -> gameMapping.getOrDefault(tag, tag)).collect(Collectors.joining(", "));
 
-        if (playedGames == null || playedGames.isEmpty()) {
+        if (playedGames.isEmpty()) {
             return "Looks like we haven't played any games today.";
         }
 
