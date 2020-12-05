@@ -2,6 +2,7 @@ package in.dragonbra.klayb0t.controller;
 
 import in.dragonbra.klayb0t.bot.TwitchBot;
 import in.dragonbra.klayb0t.model.PostChatBody;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -18,7 +19,8 @@ public class ChatController {
     }
 
     @PostMapping
-    public void postChat(@RequestBody PostChatBody body) {
+    public ResponseEntity<Void> postChat(@RequestBody PostChatBody body) {
         bot.sendMessage(body.getMessage());
+        return ResponseEntity.ok().build();
     }
 }
