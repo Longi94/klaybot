@@ -121,8 +121,11 @@ public class TwitchBot extends ListenerAdapter {
 
         for (MessageHandler messageHandler : messageHandlers) {
             if (messageHandler.canExecute(currentTimestamp)) {
-                messageHandler.setLastHandle(currentTimestamp);
-                sendMessage(messageHandler.handle(event.getUser(), event.getMessage()));
+                String messageResponse = messageHandler.handle(event.getUser(), event.getMessage());
+                if (messageResponse != null) {
+                    messageHandler.setLastHandle(currentTimestamp);
+                }
+                sendMessage(messageResponse);
             }
         }
     }

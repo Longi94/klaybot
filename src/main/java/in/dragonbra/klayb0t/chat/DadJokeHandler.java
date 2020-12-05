@@ -15,6 +15,8 @@ import java.util.regex.Pattern;
 public class DadJokeHandler extends MessageHandler {
 
     private static final long MIN_DELAY = 60000L;
+    private static final int MAX_LENGTH = 25;
+    private static final int MAX_WORD_COUNT = 3;
 
     private static final Pattern PATTERN = Pattern.compile("^(([Ii](\\sa|')?)|a)m\\s(?<target>.+)$");
 
@@ -35,7 +37,11 @@ public class DadJokeHandler extends MessageHandler {
 
         String target = matcher.group("target");
 
-        if (target.length() > 25) {
+        if (target.split("\\s+").length > MAX_WORD_COUNT) {
+            return null;
+        }
+
+        if (target.length() > MAX_LENGTH) {
             return null;
         }
 
