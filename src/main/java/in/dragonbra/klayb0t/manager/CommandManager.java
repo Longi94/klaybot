@@ -22,13 +22,14 @@ public class CommandManager {
     private final Map<String, Command> commands = new TreeMap<>();
 
     public void registerCommand(Command command) {
-        if (commands.containsKey(command.getCommandText())) {
-            logger.warn("command " + command.getCommandText() + " overridden");
-        } else {
-            logger.info("registered command " + command.getCommandText());
+        for (String commandText : command.getCommandAliases()) {
+            if (commands.containsKey(commandText)) {
+                logger.warn("command " + command.getCommandAliases() + " overridden");
+            } else {
+                logger.info(String.format("registered command (%s) to %s", commandText, command.getClass().getName()));
+            }
+            commands.put(commandText, command);
         }
-
-        commands.put(command.getCommandText(), command);
     }
 
     public String onMessage(GenericMessageEvent event, long timestamp) {

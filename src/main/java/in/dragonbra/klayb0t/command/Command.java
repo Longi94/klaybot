@@ -4,16 +4,15 @@ import in.dragonbra.klayb0t.bot.TwitchBot;
 import in.dragonbra.klayb0t.chat.BaseHandler;
 import org.pircbotx.User;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 public abstract class Command extends BaseHandler {
 
-    private String commandText;
+    private final Set<String> commandAliases = new HashSet<>();
 
     private String description;
 
-    private List<CommandArgument> arguments = new ArrayList<>();
+    private final List<CommandArgument> arguments = new ArrayList<>();
 
     protected TwitchBot bot;
 
@@ -31,16 +30,16 @@ public abstract class Command extends BaseHandler {
 
     public Command(String commandText, String description, long coolDown) {
         super(coolDown);
-        this.commandText = commandText;
+        this.commandAliases.add(commandText);
         this.description = description;
     }
 
-    public String getCommandText() {
-        return commandText;
+    public Set<String> getCommandAliases() {
+        return commandAliases;
     }
 
-    public void setCommandText(String commandText) {
-        this.commandText = commandText;
+    public void addCommandAliases(String... aliases) {
+        this.commandAliases.addAll(Arrays.asList(aliases.clone()));
     }
 
     public String getDescription() {
@@ -53,22 +52,6 @@ public abstract class Command extends BaseHandler {
 
     public List<CommandArgument> getArguments() {
         return arguments;
-    }
-
-    public void setArguments(List<CommandArgument> arguments) {
-        this.arguments = arguments;
-    }
-
-    public String getHelpText() {
-        StringBuilder builder = new StringBuilder(commandText);
-
-        for (CommandArgument argument : arguments) {
-            builder.append(" ").append(argument);
-        }
-
-        builder.append(" - ").append(description);
-
-        return builder.toString();
     }
 
     public void addArgument(CommandArgument argument) {
