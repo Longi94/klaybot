@@ -13,12 +13,12 @@ import java.util.List;
  */
 public interface JackboxGameRepository extends JpaRepository<JackboxGame, Long> {
 
-    @Query(value = "SELECT DISTINCT app_tag FROM jackbox_game WHERE created > date_add(now(), INTERVAL -6 HOUR) ORDER BY created DESC", nativeQuery = true)
+    @Query(value = "SELECT DISTINCT app_tag FROM jackbox_game WHERE created > NOW() - INTERVAL '6 HOUR' ORDER BY created DESC", nativeQuery = true)
     List<String> getRecentlyPlayed();
 
-    @Query(value = "SELECT * FROM jackbox_game WHERE code = :code AND created > date_add(now(), INTERVAL -1 HOUR)", nativeQuery = true)
+    @Query(value = "SELECT * FROM jackbox_game WHERE code = :code AND created > NOW() - INTERVAL '1 HOUR'", nativeQuery = true)
     List<JackboxGame> getRecentByCode(@Param("code") String code);
 
-    @Query(value = "SELECT app_tag as appTag, count(*) as `count`, max(created) as lastPlayed FROM jackbox_game GROUP BY app_tag ORDER BY `count` DESC", nativeQuery = true)
+    @Query(value = "SELECT app_tag as appTag, count(*) as count, max(created) as lastPlayed FROM jackbox_game GROUP BY app_tag ORDER BY count DESC", nativeQuery = true)
     List<JackboxGameStat> getStats();
 }
