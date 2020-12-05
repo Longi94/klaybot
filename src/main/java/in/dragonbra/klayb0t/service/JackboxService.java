@@ -7,7 +7,6 @@ import in.dragonbra.klayb0t.retrofit.response.jackbox.JackboxRoom;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import retrofit2.Call;
 import retrofit2.Response;
@@ -23,9 +22,6 @@ import java.util.List;
 public class JackboxService {
 
     private static final Logger logger = LogManager.getLogger(JackboxService.class);
-
-    @Value("${twitch.channel_id}")
-    private String channelId;
 
     private final JackboxInterface jackboxInterface;
 
