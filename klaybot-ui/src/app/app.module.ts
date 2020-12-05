@@ -2,14 +2,15 @@ import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 
 import { AppComponent } from './app.component';
-import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
-import { SharedModule } from "./shared/shared.module";
-import { RouterModule, Routes } from "@angular/router";
-import { StatsComponent } from "./front/stats/stats.component";
-import { HistoryComponent } from "./front/history/history.component";
-import { FrontModule } from "./front/front.module";
-import { HttpClient, HttpClientModule } from "@angular/common/http";
-import { CodeComponent } from "./front/code/code.component";
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { SharedModule } from './shared/shared.module';
+import { RouterModule, Routes } from '@angular/router';
+import { StatsComponent } from './front/stats/stats.component';
+import { HistoryComponent } from './front/history/history.component';
+import { FrontModule } from './front/front.module';
+import { HttpClientModule } from '@angular/common/http';
+import { CodeComponent } from './front/code/code.component';
+import { ChatComponent } from './front/chat/chat.component';
 
 const routes: Routes = [
     {
@@ -30,6 +31,11 @@ const routes: Routes = [
     {
         path: 'code',
         component: CodeComponent,
+        pathMatch: 'full'
+    },
+    {
+        path: 'chat',
+        component: ChatComponent,
         pathMatch: 'full'
     }
 ];

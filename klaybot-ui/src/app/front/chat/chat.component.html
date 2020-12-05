@@ -1,0 +1,8 @@
+<div class="container">
+    <div>
+        <mat-form-field>
+            <input matInput (keyup.enter)="sendMessage()" [(ngModel)]="message" [disabled]="isLoading">
+        </mat-form-field>
+        <button mat-raised-button color="primary" (click)="sendMessage()">Send</button>
+    </div>
+</div>

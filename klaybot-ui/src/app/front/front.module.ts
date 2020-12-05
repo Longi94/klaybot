@@ -14,7 +14,8 @@ import {
 import { JackboxService } from "../shared/jackbox.service";
 import { ServerPipe } from "./history/server.pipe";
 import { CodeComponent } from './code/code.component';
-import { ReactiveFormsModule } from "@angular/forms";
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { ChatComponent } from './chat/chat.component';
 
 @NgModule({
     imports: [
@@ -26,9 +27,10 @@ import { ReactiveFormsModule } from "@angular/forms";
         MatPaginatorModule,
         MatSnackBarModule,
         MatSortModule,
-        MatTableModule
+        MatTableModule,
+        FormsModule
     ],
-    declarations: [StatsComponent, HistoryComponent, ServerPipe, CodeComponent],
+    declarations: [StatsComponent, HistoryComponent, ServerPipe, CodeComponent, ChatComponent],
     exports: [StatsComponent, HistoryComponent, CodeComponent],
     providers: [JackboxService]
 })
