@@ -1,7 +1,7 @@
 export const environment = {
     production: true,
 
-    serverUrl: 'https://klayyy.com/',
+    serverUrl: 'http://klay.bot/',
 
     // @ts-ignore
     version: require('../../package.json').version
