@@ -3,7 +3,6 @@ package in.dragonbra.klayb0t.service;
 import in.dragonbra.klayb0t.entity.JackboxGame;
 import in.dragonbra.klayb0t.repository.JackboxGameRepository;
 import in.dragonbra.klayb0t.retrofit.JackboxInterface;
-import in.dragonbra.klayb0t.retrofit.TwitchInterface;
 import in.dragonbra.klayb0t.retrofit.response.jackbox.JackboxRoom;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -32,15 +31,11 @@ public class JackboxService {
 
     private final JackboxGameRepository jackboxGameRepository;
 
-    private final TwitchInterface twitchInterface;
-
     @Autowired
     public JackboxService(JackboxInterface jackboxInterface,
-                          JackboxGameRepository jackboxGameRepository,
-                          TwitchInterface twitchInterface) {
+                          JackboxGameRepository jackboxGameRepository) {
         this.jackboxInterface = jackboxInterface;
         this.jackboxGameRepository = jackboxGameRepository;
-        this.twitchInterface = twitchInterface;
     }
 
     public int handle(String code) {
