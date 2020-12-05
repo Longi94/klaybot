@@ -48,6 +48,7 @@ public class CommandManager {
 
             Command handler = commands.get(command);
             if (handler != null && handler.canExecute(timestamp)) {
+                logger.info("Handling command with " + handler.getClass().getName());
                 handler.setLastHandle(timestamp);
                 return handler.handle(user, message, args);
             } else {
