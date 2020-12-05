@@ -19,7 +19,7 @@ public class CommandManager {
     @Value("${twitch.bot.prefix}")
     private String commandPrefix;
 
-    private Map<String, Command> commands = new TreeMap<>();
+    private final Map<String, Command> commands = new TreeMap<>();
 
     public void registerCommand(Command command) {
         if (commands.containsKey(command.getCommandText())) {
