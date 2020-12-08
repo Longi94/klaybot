@@ -8,9 +8,7 @@ import org.springframework.stereotype.Service;
 import retrofit2.Response;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 @Service
@@ -25,7 +23,7 @@ public class TwitchService {
         this.twitchTmiInterface = twitchTmiInterface;
     }
 
-    public List<String> getViewerNames() throws IOException {
+    public Set<String> getViewerNames() throws IOException {
         Response<TwitchChattersResponse> response = twitchTmiInterface.getChatters(channel).execute();
 
         if (!response.isSuccessful()) {
@@ -49,6 +47,6 @@ public class TwitchService {
         names.addAll(chatters.getViewers());
         names.addAll(chatters.getVips());
 
-        return new ArrayList<>(names);
+        return names;
     }
 }

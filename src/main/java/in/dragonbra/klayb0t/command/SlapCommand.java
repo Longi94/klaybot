@@ -1,15 +1,18 @@
 package in.dragonbra.klayb0t.command;
 
 import com.google.common.collect.ImmutableList;
+import in.dragonbra.klayb0t.entity.SlapUser;
+import in.dragonbra.klayb0t.repository.SlapUserRepository;
 import in.dragonbra.klayb0t.service.TwitchService;
 import org.pircbotx.User;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Component
 public class SlapCommand extends Command {
@@ -22,18 +25,18 @@ public class SlapCommand extends Command {
             "big meaty claws", RANDOM_VIEWER
     );
 
+    private final SlapUserRepository slapUserRepository;
     private final TwitchService twitchService;
-    private final Set<String> excludeList;
 
-    public SlapCommand(TwitchService twitchService, @Qualifier("slap_exclude_list") Set<String> excludeList) {
+    public SlapCommand(SlapUserRepository slapUserRepository, TwitchService twitchService) {
         super("slap");
+        this.slapUserRepository = slapUserRepository;
         this.twitchService = twitchService;
-        this.excludeList = excludeList;
     }
 
     @Override
     public String handle(User user, String message, String[] args) {
-        List<String> users;
+        Set<String> users;
 
         try {
             users = twitchService.getViewerNames();
@@ -41,13 +44,17 @@ public class SlapCommand extends Command {
             return null;
         }
 
-        users.removeAll(excludeList);
+        Set<String> includeList =
+                slapUserRepository.findAllByExcludeFalse().stream().map(SlapUser::getName).collect(Collectors.toSet());
+        users.retainAll(includeList);
 
-        String target = users.get(rand.nextInt(users.size()));
+        List<String> validUsers = new ArrayList<>(users);
+
+        String target = validUsers.get(rand.nextInt(validUsers.size()));
         String item = THINGS.get(rand.nextInt(THINGS.size()));
 
         if (item.equals(RANDOM_VIEWER)) {
-            item = users.get(rand.nextInt(users.size()));
+            item = validUsers.get(rand.nextInt(validUsers.size()));
         }
 
         if (target.equals(user.getNick())) {

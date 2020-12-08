@@ -1,10 +1,9 @@
 package in.dragonbra.klayb0t.bot;
 
-import in.dragonbra.klayb0t.chat.DadJokeHandler;
-import in.dragonbra.klayb0t.chat.JackboxCodeHandler;
-import in.dragonbra.klayb0t.chat.MessageHandler;
-import in.dragonbra.klayb0t.chat.MrDestructoidHandler;
+import in.dragonbra.klayb0t.chat.*;
 import in.dragonbra.klayb0t.manager.CommandManager;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.pircbotx.Configuration;
 import org.pircbotx.PircBotX;
 import org.pircbotx.User;
@@ -33,6 +32,8 @@ import java.util.stream.Collectors;
 @Component
 public class TwitchBot extends ListenerAdapter {
 
+    private static final Logger logger = LogManager.getLogger(TwitchBot.class);
+
     // 5 mins
     private static final int RECONNECT_DELAY = 300000;
 
@@ -58,15 +59,17 @@ public class TwitchBot extends ListenerAdapter {
     private final List<MessageHandler> messageHandlers = new LinkedList<>();
 
     private final JackboxCodeHandler jackboxCodeHandler;
-
     private final DadJokeHandler dadJokeHandler;
+    private final SlapUserHandler slapUserHandler;
 
     public TwitchBot(CommandManager commandManager,
                      JackboxCodeHandler jackboxCodeHandler,
-                     DadJokeHandler dadJokeHandler) {
+                     DadJokeHandler dadJokeHandler,
+                     SlapUserHandler slapUserHandler) {
         this.commandManager = commandManager;
         this.jackboxCodeHandler = jackboxCodeHandler;
         this.dadJokeHandler = dadJokeHandler;
+        this.slapUserHandler = slapUserHandler;
 
         this.commandManager.setBot(this);
     }
@@ -107,6 +110,7 @@ public class TwitchBot extends ListenerAdapter {
         addMessageHandler(jackboxCodeHandler);
         addMessageHandler(dadJokeHandler);
         addMessageHandler(new MrDestructoidHandler());
+        addMessageHandler(slapUserHandler);
     }
 
     /**
@@ -161,6 +165,7 @@ public class TwitchBot extends ListenerAdapter {
     }
 
     public void addMessageHandler(MessageHandler messageHandler) {
+        logger.info("Added handler " + messageHandler.getClass().getName());
         messageHandlers.add(messageHandler);
     }
 
